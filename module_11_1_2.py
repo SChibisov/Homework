@@ -13,5 +13,5 @@ ax = plt.axes(projection='3d')
 
 # Построение графиков
 ax.plot_surface(x, y, z, cmap='viridis', edgecolor='green')
-ax.set_title('Surface plot geeks for geeks')
+ax.set_title('3D график')
 plt.show()
