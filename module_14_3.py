@@ -6,7 +6,7 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 import asyncio
 
-api = ''
+api = '7480441215:AAEeuCfWnaXWDRaZGLu5uopsGGUojDrqPL4'
 bot = Bot(token=api)
 dp = Dispatcher(bot, storage=MemoryStorage())
 
@@ -23,10 +23,10 @@ button2 = InlineKeyboardButton(text='Формулы расчёта', callback_da
 frame_buttons_2.row(button, button2)
 
 frame_prod_buttons = InlineKeyboardMarkup(row_width=4, resize_keyboard=True)
-prod_button1 = InlineKeyboardButton(text='Product1', callback_data='product_buying')
-prod_button2 = InlineKeyboardButton(text='Product2', callback_data='product_buying')
-prod_button3 = InlineKeyboardButton(text='Product3', callback_data='product_buying')
-prod_button4 = InlineKeyboardButton(text='Product4', callback_data='product_buying')
+prod_button1 = InlineKeyboardButton(text='Продукт1', callback_data='product_buying')
+prod_button2 = InlineKeyboardButton(text='Продукт2', callback_data='product_buying')
+prod_button3 = InlineKeyboardButton(text='Продукт3', callback_data='product_buying')
+prod_button4 = InlineKeyboardButton(text='Продукт4', callback_data='product_buying')
 frame_prod_buttons.add(prod_button1, prod_button2, prod_button3, prod_button4)
 
 
@@ -53,10 +53,17 @@ async def main_menu(message):
 
 @dp.message_handler(text='Купить')
 async def get_buying_list(message):
-    for i in range(1, 5):
-        await message.answer(f'Название: Product{i}| Описание: описание{i}| Цена: {i * 100}')
-        with open(f'images_product/{i}.jpg', 'rb') as img:
+    images = [
+        r'D:\Python\ProjectPythonUrbanUni\module_14\images_product\1.jpeg',
+        r'D:\Python\ProjectPythonUrbanUni\module_14\images_product\2.jpeg',
+        r'D:\Python\ProjectPythonUrbanUni\module_14\images_product\3.jpeg',
+        r'D:\Python\ProjectPythonUrbanUni\module_14\images_product\4.jpeg',
+    ]
+
+    for i, v in enumerate(images):
+        with open(v, 'rb') as img:
             await message.answer_photo(img)
+            await message.answer(f'Название: Продукт{i+1}|' f' Описание: описание{i+1}| Цена: {(i+1) * 100}')
     await message.answer('Выберите продукт для покупки:', reply_markup=frame_prod_buttons)
 
 
