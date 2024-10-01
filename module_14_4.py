@@ -7,28 +7,28 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 import asyncio
 from crud_functions import *
 
-api = '7480441215:AAEeuCfWnaXWDRaZGLu5uopsGGUojDrqPL4'
+api = ''
 bot = Bot(token=api)
 dp = Dispatcher(bot, storage=MemoryStorage())
 
-keyboard_1 = ReplyKeyboardMarkup(resize_keyboard=True)
+frame_buttons_1 = ReplyKeyboardMarkup(resize_keyboard=True)
 button3 = KeyboardButton(text='Рассчитать')
 button4 = KeyboardButton(text='Информация')
 button5 = KeyboardButton(text='Купить')
-keyboard_1.row(button3, button4)
-keyboard_1.add(button5)
+frame_buttons_1.row(button3, button4)
+frame_buttons_1.add(button5)
 
-keyboard_2 = InlineKeyboardMarkup(resize_keyboard=True)
+frame_buttons_2 = InlineKeyboardMarkup(resize_keyboard=True)
 button = InlineKeyboardButton(text='Рассчитать норму калорий', callback_data='calories')
 button2 = InlineKeyboardButton(text='Формулы расчёта', callback_data='formulas')
-keyboard_2.row(button, button2)
+frame_buttons_2.row(button, button2)
 
-keyboard_prod = InlineKeyboardMarkup(row_width=4, resize_keyboard=True)
-prod_button1 = InlineKeyboardButton(text='Product1', callback_data='product_buying')
-prod_button2 = InlineKeyboardButton(text='Product2', callback_data='product_buying')
-prod_button3 = InlineKeyboardButton(text='Product3', callback_data='product_buying')
-prod_button4 = InlineKeyboardButton(text='Product4', callback_data='product_buying')
-keyboard_prod.add(prod_button1, prod_button2, prod_button3, prod_button4)
+frame_prod_buttons = InlineKeyboardMarkup(row_width=4, resize_keyboard=True)
+prod_button1 = InlineKeyboardButton(text='Продукт1', callback_data='product_buying')
+prod_button2 = InlineKeyboardButton(text='Продукт2', callback_data='product_buying')
+prod_button3 = InlineKeyboardButton(text='Продукт3', callback_data='product_buying')
+prod_button4 = InlineKeyboardButton(text='Продукт4', callback_data='product_buying')
+frame_prod_buttons.add(prod_button1, prod_button2, prod_button3, prod_button4)
 
 
 class UserState(StatesGroup):
@@ -39,7 +39,7 @@ class UserState(StatesGroup):
 
 @dp.message_handler(commands=['start'])
 async def start(message):
-    await message.answer('Привет! Я бот помогающий твоему здоровью.', reply_markup=keyboard_1)
+    await message.answer('Привет! Я бот помогающий твоему здоровью.', reply_markup=frame_buttons_1)
 
 
 @dp.message_handler(text='Информация')
@@ -49,7 +49,7 @@ async def inform(message):
 
 @dp.message_handler(text='Рассчитать')
 async def main_menu(message):
-    await message.answer('Выберите опцию:', reply_markup=keyboard_2)
+    await message.answer('Выберите опцию:', reply_markup=frame_buttons_2)
 
 
 @dp.message_handler(text='Купить')
@@ -60,14 +60,14 @@ async def get_buying_list(message):
         r'D:\Python\ProjectPythonUrbanUni\module_14\images_product\3.jpeg',
         r'D:\Python\ProjectPythonUrbanUni\module_14\images_product\4.jpeg',
     ]
-    items = get_all_products()
+
+    base = get_all_products()
+
     for i, v in enumerate(images):
         with open(v, 'rb') as img:
             await message.answer_photo(img)
-            await message.answer(f'''Название {items[0][i][-1]} | 
-            Описание {items[1][i][-1]} | Цена: {items[2][i][-1]}
-            ''')
-    await message.answer("Выберите продукт для покупки:", reply_markup=keyboard_prod)
+            await message.answer(f'Название: {base[i][1]}|' f' Описание: {base[i][2]}| Цена: {base[i][3]}')
+    await message.answer('Выберите продукт для покупки:', reply_markup=frame_prod_buttons)
 
 
 @dp.callback_query_handler(text='product_buying')
